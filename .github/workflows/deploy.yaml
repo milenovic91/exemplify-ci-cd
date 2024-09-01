@@ -17,6 +17,9 @@ jobs:
       - name: Docker login
         run: |
           echo ${{ secrets.docker_password }} | docker login --username ${{ secrets.docker_username }} --password-stdin
+      - name: Verify Docker connection
+        run: |
+          docker run hello-world
       - name: Check version
         run: |
           local_version=$(cat package.json | grep dockerVersion | tr -cd '[:digit:].')
