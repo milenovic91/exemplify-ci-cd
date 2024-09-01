@@ -23,7 +23,7 @@ jobs:
           docker pull milenibgd/exemplify-ci-cd:${local_version} &>/dev/null
           if [[ $? -ne 0 ]]; then
             echo "Image with a tag $local_version does not exist."
-            echo "NEW_BUILD_VERSION=${local_version}" >> $GITHUB_ENV
+            # echo "NEW_BUILD_VERSION=${local_version}" >> $GITHUB_ENV
           else
             echo "Image with a tag $local_version already exists."
           fi
