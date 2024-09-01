@@ -14,7 +14,18 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 18.x
+      - name: Check version
+        run: |
+          local_version=$(cat package.json | grep dockerVersion | tr -cd '[:digit:].')
+          docker pull milenibgd/exemplify-ci-cd:${local_version} &>/dev/null
+          if [[ $? -ne 0 ]]; then
+            echo "Image with a tag $local_version does not exist."
+            echo "NEW_BUILD_VERSION=${local_version}" >> $GITHUB_ENV
+          else
+          echo "Image with a tag $local_version already exists."
+          fi
       - name: Docker login
+        if: ${{ env.NEW_BUILD_VERSION }}
         run: |
           echo ${{ secrets.docker_password }} | docker login --username ${{ secrets.docker_username }} --password-stdin
       - run: echo "🍏 This job's status is ${{ job.status }}."
