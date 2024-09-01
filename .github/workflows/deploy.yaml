@@ -34,6 +34,6 @@ jobs:
         if: ${{ env.NEW_BUILD_VERSION }}
         run: |
           echo "Creating new image..."
-          docker build -t milenibgd/exemplify-ci-cd:${{ env.NEW_BUILD_VERSION }}
+          docker build -t milenibgd/exemplify-ci-cd:${{ env.NEW_BUILD_VERSION }} .
           docker push milenibgd/exemplify-ci-cd:${{ env.NEW_BUILD_VERSION }}
       - run: echo "🍏 This job's status is ${{ job.status }}."
