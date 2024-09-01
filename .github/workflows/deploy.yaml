@@ -20,7 +20,7 @@ jobs:
       - name: Check version
         run: |
           local_version=$(cat package.json | grep dockerVersion | tr -cd '[:digit:].')
-          docker pull milenibgd/exemplify-ci-cd:${local_version} &>/dev/null
+          docker pull milenibgd/exemplify-ci-cd:${local_version}
           if [[ $? -ne 0 ]]; then
             echo "Image with a tag $local_version does not exist."
             # echo "NEW_BUILD_VERSION=${local_version}" >> $GITHUB_ENV
