@@ -14,6 +14,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 18.x
+      - name: Docker login
+        run: |
+          echo ${{ secrets.docker_password }} | docker login --username ${{ secrets.docker_username }} --password-stdin
       - name: Check version
         run: |
           local_version=$(cat package.json | grep dockerVersion | tr -cd '[:digit:].')
@@ -27,7 +30,6 @@ jobs:
       - name: Build Docker image
         if: ${{ env.NEW_BUILD_VERSION }}
         run: |
-          echo ${{ secrets.docker_password }} | docker login --username ${{ secrets.docker_username }} --password-stdin
           echo "Creating new image..."
           docker build -t milenibgd/exemplify-ci-cd:${{ env.NEW_BUILD_VERSION }}
           docker push milenibgd/exemplify-ci-cd:${{ env.NEW_BUILD_VERSION }}
