@@ -26,7 +26,7 @@ jobs:
           remote_version=$(docker pull milenibgd/exemplify-ci-cd:${local_version} || echo "")
           if [[ $local_version != $remote_version ]]; then
             echo "Image with a tag $local_version does not exist."
-            # echo "NEW_BUILD_VERSION=${local_version}" >> $GITHUB_ENV
+            echo "NEW_BUILD_VERSION=${local_version}" >> $GITHUB_ENV
           else
             echo "Image with a tag $local_version already exists."
           fi
