@@ -1,7 +1,7 @@
 {
   "name": "exemplify-ci-cd",
   "version": "1.0.0",
-  "dockerVersion": "1.0.1",
+  "dockerVersion": "1.0.2",
   "description": "",
   "main": "index.js",
   "scripts": {
