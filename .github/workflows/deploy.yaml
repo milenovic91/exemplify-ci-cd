@@ -38,7 +38,7 @@ jobs:
           docker build -t milenibgd/exemplify-ci-cd:${{ env.NEW_BUILD_VERSION }} .
           docker push milenibgd/exemplify-ci-cd:${{ env.NEW_BUILD_VERSION }}
       - name: Update deployment.yaml
-        run |
+        run: |
           sed -i '' 's/image:.*/image: milenibgd\/exemplify-ci-cd:${{ env.NEW_BUILD_VERSION }}/' deployconfig/deployment.yaml
           git add deployconfig/deployment.yaml
           git commit -m "update deploy image to ${{ env.NEW_BUILD_VERSION }}"
