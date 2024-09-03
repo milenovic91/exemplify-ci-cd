@@ -22,13 +22,14 @@ jobs:
           docker run hello-world
       - name: Check version
         run: |
-          local_version=$(cat package.json | grep dockerVersion | tr -cd '[:digit:].')
-          remote_version=$(docker pull milenibgd/exemplify-ci-cd:${local_version} || echo "")
-          if [[ $local_version != $remote_version ]]; then
-            echo "Image with a tag $local_version does not exist."
-            echo "NEW_BUILD_VERSION=${local_version}" >> $GITHUB_ENV
+          desired_version=$(cat package.json | grep dockerVersion | tr -cd '[:digit:].')
+          status=$(docker manifest inspect milenibgd/exemplify-ci-cd:${desired_version} 2>&1 | grep -q "no such manifest" && echo "NotFound" || echo "Found")
+
+          if [[ $status == "NotFound" ]]; then
+            echo "Image with a tag $desired_version does not exist."
+            echo "NEW_BUILD_VERSION=${desired_version}" >> $GITHUB_ENV
           else
-            echo "Image with a tag $local_version already exists."
+            echo "Image with a tag $desired_version already exists."
           fi
       - name: Build Docker image
         if: ${{ env.NEW_BUILD_VERSION }}
@@ -36,4 +37,10 @@ jobs:
           echo "Creating new image..."
           docker build -t milenibgd/exemplify-ci-cd:${{ env.NEW_BUILD_VERSION }} .
           docker push milenibgd/exemplify-ci-cd:${{ env.NEW_BUILD_VERSION }}
+      - name: Update deployment.yaml
+        run |
+          sed -i '' 's/image:.*/image: milenibgd\/exemplify-ci-cd:${{ env.NEW_BUILD_VERSION }}/' deployconfig/deployment.yaml
+          git add deployconfig/deployment.yaml
+          git commit -m "update deploy image to ${{ env.NEW_BUILD_VERSION }}"
+          git push
       - run: echo "🍏 This job's status is ${{ job.status }}."
