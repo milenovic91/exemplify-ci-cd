@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: cicdtest
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ci-cd-deployment
+  namespace: cicdtest
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ci-cd-depl
+  template:
+    metadata:
+      labels:
+        app: ci-cd-depl
+    spec:
+      containers:
+      - image: milenibgd/exemplify-ci-cd:1.0.1
+        name: ci-cd
+        ports:
+          - name: http
+            containerPort: 8000
+            protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ci-cd-service
+  namespace: cicdtest
+spec:
+  selector:
+    app: ci-cd-depl
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
