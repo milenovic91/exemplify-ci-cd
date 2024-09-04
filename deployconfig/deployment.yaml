@@ -19,7 +19,7 @@ spec:
         app: ci-cd-depl
     spec:
       containers:
-      - image: milenibgd/exemplify-ci-cd:1.0.1
+      - image: milenibgd/exemplify-ci-cd:1.0.5
         name: ci-cd
         ports:
           - name: http
