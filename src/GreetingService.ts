@@ -1,3 +1,3 @@
 export function greeting() {
-  return 'Ciao Miki Veliki'
+  return 'Cao BG'
 }
