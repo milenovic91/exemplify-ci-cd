@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - master
+permissions:
+  contents: write
 jobs:
   CI-Job:
     runs-on: ubuntu-latest
@@ -39,6 +41,8 @@ jobs:
           docker push milenibgd/exemplify-ci-cd:${{ env.NEW_BUILD_VERSION }}
       - name: Update deployment.yaml
         if: ${{ env.NEW_BUILD_VERSION }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           sed 's/image:.*/image: milenibgd\/exemplify-ci-cd:${{ env.NEW_BUILD_VERSION }}/' deployconfig/deployment.yaml > deployconfig/deployment.yaml.tmp
           mv deployconfig/deployment.yaml.tmp deployconfig/deployment.yaml
